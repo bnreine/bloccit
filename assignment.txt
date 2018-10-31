@@ -1,0 +1,8 @@
+For this assignment, read about the concept of release early, release
+often and write at least one reason for and one against this practice
+in the submission box.
+
+For: Software progresses faster with customer feedback loop.
+
+
+Against: More bugs and less polished.
