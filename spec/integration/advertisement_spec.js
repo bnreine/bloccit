@@ -61,6 +61,79 @@ describe("routes : advertisements", () => {
 
 
 
+  describe("POST /advertisements/create", () => {
+    const options = {
+      url: `${base}create`,
+      form: {
+        title: "ballyhoo",
+        description: "some name"
+      }
+    };
+
+         it("should create a new advertisement and redirect", (done) => {
+           request.post(options,
+             (err, res, body) => {
+               Advertisement.findOne({where: {title: "ballyhoo"}})
+               .then((advertisement) => {
+                 expect(res.statusCode).toBe(303);
+                 expect(advertisement.title).toBe("ballyhoo");
+                 expect(advertisement.description).toBe("some name");
+                 done();
+               })
+               .catch((err) => {
+                 console.log(err);
+                 done();
+               });
+           });
+         });
+
+  });
+
+
+
+  describe("GET /advertisements/:id", () => {
+
+         it("should render a view with the selected advertisement", (done) => {
+           request.get(`${base}${this.advertisement.id}`, (err, res, body) => {
+             expect(err).toBeNull();
+             expect(body).toContain("JS Frameworks");
+             done();
+           });
+         });
+
+  });
+
+
+
+
+
+  describe("POST /advertisements/:id/destroy", () => {
+
+    it("should delete the advertisement with the associated ID", (done) => {
+      Advertisement.all()
+      .then((advertisements) => {
+        const advertisementCountBeforeDelete = advertisements.length;
+        expect(advertisementCountBeforeDelete).toBe(1);
+
+        request.post(`${base}${this.advertisement.id}/destroy`, (err, res, body) => {
+          Advertisement.all()
+          .then((advertisements) => {
+            expect(err).toBeNull();
+            expect(advertisements.length).toBe(advertisementCountBeforeDelete - 1);
+            done();
+          })
+
+        });
+      });
+
+    });
+
+  });
+
+
+
+
+
 
 
 });
