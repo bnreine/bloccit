@@ -1,0 +1,6 @@
+Google OAuth:
+
+Google authentication takes a token and a token secret to access a your 3rd party google profile.
+Then with the token, token secret, and google profile, passport authenticates this
+information with its database and if the user info matches the credentials above, then the application
+authorizes the user to enter.
