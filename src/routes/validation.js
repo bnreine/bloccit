@@ -10,6 +10,7 @@ module.exports = {
       req.flash("error", errors);
       return res.redirect(303, req.headers.referer)
     } else {
+      //console.log("Sucessful valdiation")
       return next();
     }
   },

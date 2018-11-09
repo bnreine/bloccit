@@ -24,16 +24,12 @@ describe("Topic", () => {
            Topic.create({
              title: "Expeditions to Alpha Centauri",
              description: "A compilation of reports from recent visits to the star system.",
-
-  // #4
              posts: [{
                title: "My first visit to Proxima Centauri b",
                body: "I saw some rocks.",
                userId: this.user.id
              }]
            }, {
-
-  // #5
              include: {
                model: Post,
                as: "posts"
