@@ -53,16 +53,33 @@ module.exports = {
       }
     });
   },
+
+
   edit(req, res, next){
+    //console.log("inside edit function of controller")
     postQueries.getPost(req.params.id, (err, post) => {
+      //console.log(post)
       if(err || post == null){
         res.redirect(404, "/");
       } else {
-        res.render("posts/edit", {post});
+        //console.log(post)
+        const authorized = new Authorizer(req.user, post).edit();
+        //console.log(authorized)
+        if(authorized){
+          res.render("posts/edit", {post});
+        } else {
+          req.flash("You are not authorized to do that.")
+          //console.log(req.params.topicId)
+          //console.log(req.params.id)
+          res.redirect(`/topics/${req.params.topicId}/posts/${req.params.id}`)
+        }
       }
     });
   },
+
   update(req, res, next){
+
+    console.log(req.user)
     postQueries.updatePost(req.params.id, req.body, (err, post) => {
       if(err || post == null){
         res.redirect(404, `/topics/${req.params.topicId}/posts/${req.params.id}/edit`);
