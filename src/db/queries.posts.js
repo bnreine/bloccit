@@ -1,5 +1,6 @@
 const Post = require("./models").Post;
 const Topic = require("./models").Topic;
+const Authorizer = require("../policies/post");
 
 module.exports = {
   addPost(newPost, callback){
@@ -56,7 +57,7 @@ module.exports = {
 
 
   updatePost(req, updatedPost, callback){
-    //console.log(req.user)
+
   return Post.findById(req.params.id)
   .then((post) => {
     if(!post){

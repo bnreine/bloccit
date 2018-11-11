@@ -15,7 +15,7 @@ describe("routes : posts", () => {
      this.user;
 
      sequelize.sync({force: true}).then((res) => {
-       User.create({
+       User.create({     //member owner id = 1
          email: "starman@tesla.com",
          password: "Trekkie4lyfe"
        })
@@ -41,7 +41,7 @@ describe("routes : posts", () => {
            this.post = topic.posts[0];
            //done();
 
-           User.create({
+           User.create({      // non-owner member, id = 2
                email: "jon@gmail.com",
                password: "stonybrook",
                role: "member"
@@ -49,7 +49,7 @@ describe("routes : posts", () => {
 
            .then((user) => {
              //done();
-             User.create({
+             User.create({       // admin id = 3
                  email: "admin@gmail.com",
                  password: "adminWord",
                  role: "admin"
@@ -547,23 +547,6 @@ describe("GET /topics/:topicId/posts/:id/edit", () => {
 
 describe("POST /topics/:topicId/posts/:id/update", () => {
 
-
-/*
-  it("should return a status code 302", (done) => {
-    request.post({
-      url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
-      form: {
-        title: "Snowman Building Competition",
-        body: "I love watching them melt slowly."
-      }
-    }, (err, res, body) => {
-      expect(res.statusCode).toBe(302);
-      done();
-    });
-  });
-*/
-
-
   it("should update the post with the given values", (done) => {
       const options = {
         url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
@@ -731,6 +714,35 @@ describe("GET /topics/:topicId/posts/:id/edit", () => {
 
 
 
+
+
+
+describe("POST /topics/:topicId/posts/:id/update", () => {
+
+  it("should update the post with the given values", (done) => {
+      const options = {
+        url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
+        form: {
+          title: "Snowman Building Competition",
+          body: "I love watching them melt slowly."
+        }
+      };
+      request.post(options,
+        (err, res, body) => {
+
+        expect(err).toBeNull();
+
+        Post.findOne({
+          where: {id: this.post.id}
+        })
+        .then((post) => {
+          expect(post.title).toBe("Snowman Building Competition");
+          done();
+        });
+      });
+  });
+
+});
 
 
 

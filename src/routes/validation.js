@@ -7,10 +7,11 @@ module.exports = {
     }
     const errors = req.validationErrors();
     if (errors) {
+      //console.log(`there are validation errors for userId: ${req.user.id} requesting ${req.url}`)
       req.flash("error", errors);
       return res.redirect(303, req.headers.referer)
     } else {
-      //console.log("Sucessful valdiation")
+      //console.log(`Sucessful valdiation for userId: ${req.user.id} requesting ${req.url}`)
       return next();
     }
   },
