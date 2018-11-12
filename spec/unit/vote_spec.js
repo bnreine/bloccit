@@ -139,6 +139,21 @@ describe("Vote", () => {
                    })
                  });
 
+          it("should not create a vote with a value not equal to 1 or -1", (done) => {
+            Vote.create({
+              value: 4,
+              postId: this.post.id,
+              userId: this.user.id
+            })
+            .then((vote) => {
+              done()
+            })
+            .catch((err) => {
+              expect(err.message).toContain("Validation isIn on value failed")
+              done();
+            })
+          })
+
 
         });
 
