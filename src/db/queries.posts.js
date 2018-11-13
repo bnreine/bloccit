@@ -16,14 +16,12 @@ module.exports = {
     })
   },
   getPost(id, callback){
-    //return Post.findById(id)
 
     return Post.findById(id, {
       include: [
         {model: Comment, as: "comments", include: [
-          {model: User }
-           ]}, {model: Vote, as: "votes"}
-        //]}
+          {model: User}
+        ]}, {model: Vote, as: "votes"}
       ]
     })
     .then((post) => {

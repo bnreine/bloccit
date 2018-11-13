@@ -115,6 +115,8 @@ describe("routes : votes", () => {
 
 //***************************start signed in user context****************************
 
+
+
 describe("signed in user voting on a post", () => {
 
      beforeEach((done) => {  // before each suite in this context
@@ -130,6 +132,136 @@ describe("signed in user voting on a post", () => {
          }
        );
      });
+
+
+
+     describe("#hasUpvoteFor(userId) of Post model", () => {
+       it("should return whether specified user upvoted this particular post", (done) => {
+         Vote.create({
+           value: 1,
+           postId: this.post.id,
+           userId: this.user.id
+         })
+         .then((vote) => {
+           Post.findById(this.post.id, {
+             include: [
+               {model: Vote, as: "votes"}
+             ]
+           })
+           .then((post) => {
+             expect(post.hasUpvoteFor(this.user.id)).toBe(true);
+             done();
+           })
+           .catch((err) => {
+             console.log(err);
+             done();
+           })
+         })
+         .catch((err) => {
+           console.log(err);
+           done();
+         })
+       })
+
+     })
+
+
+
+
+
+     describe("#hasDownvoteFor(userId) of Post model", () => {
+       it("should return whether specified user downvoted this particular post", (done) => {
+         Vote.create({
+           value: -1,
+           postId: this.post.id,
+           userId: this.user.id
+         })
+         .then((vote) => {
+           Post.findById(this.post.id, {
+             include: [
+               {model: Vote, as: "votes"}
+             ]
+           })
+           .then((post) => {
+             expect(post.hasDownvoteFor(this.user.id)).toBe(true);
+             done();
+           })
+           .catch((err) => {
+             console.log(err);
+             done();
+           })
+         })
+         .catch((err) => {
+           console.log(err);
+           done();
+         })
+       })
+
+     })
+
+
+
+
+
+
+
+     describe("#getPoints() of Post model", () => {
+
+       it("should return the net voting points on a given post", (done) => {
+         //Vote.create with id = 1 (already exists and vote)
+         Vote.create({
+           value: 1,
+           postId: this.post.id,
+           userId: this.user.id
+         })
+         .then((vote) => {
+           User.create({
+             email: "memberTwo@gmail.com",
+             password: "memberTwoPassword"
+           })
+           .then((user) => {
+             Vote.create({
+               value: 1,
+               postId: this.post.id,
+               userId: 2  //userId of user I just created above
+             })
+             .then((vote) => {
+               Post.findById(this.post.id, {
+                 include: [
+                   {model: Vote, as: "votes"}
+                 ]
+               })
+               .then((post) => {
+                 expect(post.getPoints()).toBe(2);
+                 done();
+               })
+               .catch((err) => {
+                 console.log(err);
+                 done();
+               })
+             })
+             .catch((err) => {
+               console.log(err);
+               done();
+             })
+           })
+           .catch((err) => {
+             console.log(err);
+             done();
+           })
+         })
+         .catch((err) => {
+           console.log(err);
+           done();
+         })
+      })
+    })
+
+
+
+
+
+
 
      describe("GET /topics/:topicId/posts/:postId/votes/upvote", () => {
 
@@ -159,6 +291,9 @@ describe("signed in user voting on a post", () => {
            }
          );
        });
+
+
+
 
        it("should not create more than one upvote per user", (done) => {
          const options = {
@@ -194,26 +329,6 @@ request.get(options,
 
 
 //************************end nested get request*********
-
-/*
-             Vote.findOne({
-               where: {
-                 userId: this.user.id,
-                 postId: this.post.id
-               }
-             })
-             .then((vote) => {               // confirm that an upvote was created
-               expect(vote).not.toBeNull();
-               expect(vote.value).toBe(1);
-               expect(vote.userId).toBe(this.user.id);
-               expect(vote.postId).toBe(this.post.id);
-               done();
-             })
-             .catch((err) => {
-               console.log(err);
-               done();
-             });
-*/
 
 
            }
