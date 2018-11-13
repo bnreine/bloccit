@@ -46,6 +46,13 @@ module.exports = (sequelize, DataTypes) => {
         postId: post.id
       });
     });
+    Post.afterCreate((post, callback) => {
+      return models.Vote.create({
+          value: 1,
+          postId: post.id,
+          userId: post.userId
+      });
+    });
   };
   Post.prototype.getPoints = function(){
      if(this.votes.length === 0) return 0
