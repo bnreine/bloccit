@@ -45,15 +45,16 @@ module.exports = {
 
   show(req, res, next){
 
-   // #1
+    //console.log(req.params.id)  //logs correct user id while logged in
     userQueries.getUser(req.params.id, (err, result) => {
 
    // #2
       if(err || result.user === undefined){
+        console.log(err)
         req.flash("notice", "No user found with that ID.");
         res.redirect("/");
       } else {
-
+        //console.log(result.user.favorites[0].Post)
    // #3
         res.render("users/show", {...result});
       }
