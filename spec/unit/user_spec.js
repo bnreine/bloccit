@@ -65,6 +65,8 @@ describe("User", () => {
       })
       .then((user) => {
 
+
+//**********************************************************
         User.create({
           email: "user@example.com",
           password: "nananananananananananananananana BATMAN!"
@@ -78,9 +80,12 @@ describe("User", () => {
           done();
         })
         .catch((err) => {
+          console.log("I'm here")
           expect(err.message).toContain("Validation error");
           done();
         });
+//********************************************
+
 
         done();
       })

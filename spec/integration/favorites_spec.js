@@ -181,7 +181,7 @@ describe("signed in user favoriting a post", () => {
 
 
 
-
+/*
      describe("POST /topics/:topicId/posts/:postId/favorites/:id/destroy", () => {
 
        it("should destroy a favorite", (done) => {
@@ -213,10 +213,12 @@ describe("signed in user favoriting a post", () => {
          });
        });
      });
-
+*/
 
 
   });
+
+
 
 //**************************Signed in user context*********************************
 
