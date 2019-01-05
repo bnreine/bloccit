@@ -72,7 +72,6 @@ module.exports = {
   },
 
   update(req, res, next){
-    //console.log(`userId: ${req.user.id}, url: ${req.url}, title: ${req.body.title}`)
     postQueries.updatePost(req, req.body, (err, post) => {
       if(err || post == null){
         res.redirect(404, `/topics/${req.params.topicId}/posts/${req.params.id}/edit`);

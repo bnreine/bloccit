@@ -38,8 +38,6 @@ describe("routes : users", () => {
 
 
   describe("POST /users", () => {
-
-// #1
     it("should create a new user with valid values and redirect", (done) => {
 
       const options = {
@@ -53,7 +51,6 @@ describe("routes : users", () => {
       request.post(options,
         (err, res, body) => {
 
-// #2
           User.findOne({where: {email: "user@example.com"}})
           .then((user) => {
             expect(user).not.toBeNull();
@@ -69,7 +66,7 @@ describe("routes : users", () => {
       );
     });
 
-// #3
+
     it("should not create a new user with invalid attributes and redirect", (done) => {
       request.post(
         {
@@ -117,11 +114,9 @@ describe("routes : users", () => {
 
 
 
-  // #2
      describe("GET /users/:id", () => {
 
        beforeEach((done) => {
-   // #3
          this.user;
          this.post;
          this.comment;
@@ -166,12 +161,9 @@ describe("routes : users", () => {
 
 
 
-   // #4
        it("should present a list of comments and posts a user has created", (done) => {
 
          request.get(`${base}${this.user.id}`, (err, res, body) => {
-
-   // #5
            expect(body).toContain("Snowball Fighting");
            expect(body).toContain("This comment is alright.")
            done();

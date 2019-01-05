@@ -12,7 +12,6 @@ module.exports = {
     })
   },
   new(req, res, next){
-// #2
     const authorized = new Authorizer(req.user).new();
 
     if(authorized) {
@@ -23,11 +22,7 @@ module.exports = {
     }
   },
   create(req, res, next){
-
-   // #1
        const authorized = new Authorizer(req.user).create();
-
-   // #2
        if(authorized) {
          let newTopic = {
            title: req.body.title,
@@ -41,8 +36,6 @@ module.exports = {
            }
          });
        } else {
-
-   // #3
          req.flash("notice", "You are not authorized to do that.");
          res.redirect("/topics");
        }
@@ -63,7 +56,6 @@ module.exports = {
 
 
   destroy(req, res, next){
-// #1
     topicQueries.deleteTopic(req, (err, topic) => {
       if(err){
         res.redirect(err, `/topics/${req.params.id}`)
@@ -75,17 +67,11 @@ module.exports = {
 
 
   edit(req, res, next){
-
-// #1
     topicQueries.getTopic(req.params.id, (err, topic) => {
       if(err || topic == null){
         res.redirect(404, "/");
       } else {
-
-// #2
         const authorized = new Authorizer(req.user, topic).edit();
-
-// #3
         if(authorized){
           res.render("topics/edit", {topic});
         } else {
@@ -101,8 +87,6 @@ module.exports = {
 
 
   update(req, res, next){
-
-// #1
   topicQueries.updateTopic(req, req.body, (err, topic) => {
     if(err || topic == null){
       res.redirect(401, `/topics/${req.params.id}/edit`);
