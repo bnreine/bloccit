@@ -7,16 +7,16 @@ const Topic = require("../../src/db/models").Topic;
 describe("routes : topics", () => {
 
 
-  beforeEach((done) => { // before each context
+  beforeEach((done) => {
 
-    this.topic;   // define variables and bind to context
-    sequelize.sync({ force: true }).then(() => {  // clear database
+    this.topic;
+    sequelize.sync({ force: true }).then(() => {
       Topic.create({
         title: "JS Frameworks",
         description: "There is a lot of them"
       })
       .then((res) => {
-        this.topic = res;  // store resulting topic in context
+        this.topic = res;
         done();
       })
       .catch((err) => {
@@ -35,9 +35,9 @@ describe("routes : topics", () => {
 
   describe("admin user performing CRUD actions for Topic", () => {
 
-    beforeEach((done) => {  // before each suite in admin context
+    beforeEach((done) => {
 
-      request.get({         // mock authentication
+      request.get({
         url: "http://localhost:3000/auth/fake",
         form: {
           email: "bjj@gmail.com",
@@ -151,12 +151,7 @@ describe("routes : topics", () => {
         Topic.all()
         .then((topics) => {
           const topicCountBeforeDelete = topics.length;
-
           expect(topicCountBeforeDelete).toBe(1);
-          //console.log(`base: ${base}`);
-          //console.log(`topicId: ${this.topic.id}`);
-          //console.log(`url: ${base}${this.topic.id}/destroy`);
-
           request.post(`${base}${this.topic.id}/destroy`, (err, res, body) => {
             Topic.all()
             .then((topics) => {
@@ -262,7 +257,7 @@ describe("routes : topics", () => {
 
   describe("member user performing CRUD actions for Topic", () => {
 
-    beforeEach((done) => {  // before each suite in admin context
+    beforeEach((done) => {
       request.get({
         url: "http://localhost:3000/auth/fake",
         form: {
@@ -329,8 +324,6 @@ describe("routes : topics", () => {
     describe("GET /topics/:id", () => {
 
       it("should render a view with the selected topic", (done) => {
-        // variables defined outside, like `this.topic` are only available
-        // inside `it` blocks.
         request.get(`${base}${this.topic.id}`, (err, res, body) => {
           expect(err).toBeNull();
           expect(body).toContain("JS Frameworks");
@@ -346,13 +339,10 @@ describe("routes : topics", () => {
         Topic.all()
         .then((topics) => {
           const topicCountBeforeDelete = topics.length;
-
           expect(topicCountBeforeDelete).toBe(1);
-
           request.post(`${base}${this.topic.id}/destroy`, (err, res, body) => {
             Topic.all()
             .then((topics) => {
-              // confirm that no topics were deleted
               expect(topics.length).toBe(topicCountBeforeDelete);
               done();
             })
@@ -375,7 +365,7 @@ describe("routes : topics", () => {
         request.get(`${base}${this.topic.id}/edit`, (err, res, body) => {
           expect(err).toBeNull();
           expect(body).not.toContain("Edit Topic");
-          expect(body).toContain("JS Frameworks"); // confirm redirect to topic show
+          expect(body).toContain("JS Frameworks");
           done();
         });
       });
@@ -400,7 +390,7 @@ describe("routes : topics", () => {
             where: { id:1 }
           })
           .then((topic) => {
-            expect(topic.title).toBe("JS Frameworks"); // confirm title is unchanged
+            expect(topic.title).toBe("JS Frameworks"); 
             done();
           });
         });

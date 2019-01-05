@@ -1,7 +1,6 @@
 const request = require("request");
 const server = require("../../src/server");
 const base = "http://localhost:3000/topics/";
-
 const sequelize = require("../../src/db/models/index").sequelize;
 const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
@@ -12,13 +11,12 @@ describe("routes : votes", () => {
 
   beforeEach((done) => {
 
- // #2
     this.user;
     this.topic;
     this.post;
     this.vote;
 
- // #3
+
     sequelize.sync({force: true}).then((res) => {
       User.create({
         email: "starman@tesla.com",
@@ -54,7 +52,7 @@ describe("routes : votes", () => {
     });
   });
 
-  // test suites go here
+
 
 
 
@@ -63,7 +61,7 @@ describe("routes : votes", () => {
 //*************************************start guest context******************************
   describe("guest attempting to vote on a post", () => {
 
-       beforeEach((done) => {    // before each suite in this context
+       beforeEach((done) => {
          request.get({
            url: "http://localhost:3000/auth/fake",
            form: {
@@ -85,7 +83,7 @@ describe("routes : votes", () => {
            };
            request.get(options,
              (err, res, body) => {
-               Vote.findOne({            // look for the vote, should not find one.
+               Vote.findOne({
                  where: {
                    userId: this.user.id,
                    postId: this.post.id
@@ -119,8 +117,8 @@ describe("routes : votes", () => {
 
 describe("signed in user voting on a post", () => {
 
-     beforeEach((done) => {  // before each suite in this context
-       request.get({         // mock authentication
+     beforeEach((done) => {
+       request.get({
          url: "http://localhost:3000/auth/fake",
          form: {
            role: "member",     // mock authenticate as member user
@@ -208,7 +206,6 @@ describe("signed in user voting on a post", () => {
      describe("#getPoints() of Post model", () => {
 
        it("should return the net voting points on a given post", (done) => {
-         //Vote.create with id = 1 (already exists and vote)
          Vote.create({
            value: 1,
            postId: this.post.id,
@@ -223,7 +220,7 @@ describe("signed in user voting on a post", () => {
              Vote.create({
                value: 1,
                postId: this.post.id,
-               userId: 2  //userId of user I just created above
+               userId: 2
              })
              .then((vote) => {
                Post.findById(this.post.id, {
@@ -277,7 +274,7 @@ describe("signed in user voting on a post", () => {
                  postId: this.post.id
                }
              })
-             .then((vote) => {               // confirm that an upvote was created
+             .then((vote) => {
                expect(vote).not.toBeNull();
                expect(vote.value).toBe(1);
                expect(vote.userId).toBe(this.user.id);
@@ -302,7 +299,6 @@ describe("signed in user voting on a post", () => {
          request.get(options,
            (err, res, body) => {
 
-//*********************start nested get request********
 
 
 request.get(options,
@@ -313,7 +309,7 @@ request.get(options,
         postId: this.post.id
       }
     })
-    .then((votes) => {               // confirm that an upvote was created
+    .then((votes) => {
       expect(votes.length).toBe(1);
       done();
     })
@@ -325,10 +321,6 @@ request.get(options,
 );
 
 
-
-
-
-//************************end nested get request*********
 
 
            }
@@ -359,7 +351,7 @@ request.get(options,
                  postId: this.post.id
                }
              })
-             .then((vote) => {               // confirm that a downvote was created
+             .then((vote) => {               
                expect(vote).not.toBeNull();
                expect(vote.value).toBe(-1);
                expect(vote.userId).toBe(this.user.id);

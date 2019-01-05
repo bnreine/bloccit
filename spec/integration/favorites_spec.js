@@ -1,7 +1,6 @@
 const request = require("request");
 const server = require("../../src/server");
 const base = "http://localhost:3000/topics/";
-
 const sequelize = require("../../src/db/models/index").sequelize;
 const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
@@ -11,13 +10,10 @@ const Favorite = require("../../src/db/models").Favorite;
 describe("routes : favorites", () => {
 
  beforeEach((done) => {
-   //console.log("before all")
-// #2
    this.user;
    this.topic;
    this.post;
 
-// #3
    sequelize.sync({force: true}).then((res) => {
      User.create({
        email: "starman@tesla.com",
@@ -58,8 +54,8 @@ describe("routes : favorites", () => {
 
  describe("guest attempting to favorite on a post", () => {
 
-     beforeEach((done) => {    // before each suite in this context
-       //console.log("before")
+     beforeEach((done) => {
+
        request.get({
          url: "http://localhost:3000/auth/fake",
          form: {
@@ -78,9 +74,6 @@ describe("routes : favorites", () => {
      describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
 
        it("should not create a new favorite", (done) => {
-         //console.log("hello")
-
-
          const options = {
            url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`,
            form: {
@@ -91,7 +84,6 @@ describe("routes : favorites", () => {
 
          let favCountBeforeCreate;
 
- // #2
          this.post.getFavorites()
          .then((favorites) => {
            favCountBeforeCreate = favorites.length;
@@ -100,7 +92,7 @@ describe("routes : favorites", () => {
              (err, res, body) => {
                Favorite.all()
                .then((favorite) => {
-                 expect(favCountBeforeCreate).toBe(favorite.length); // confirm no favorites created
+                 expect(favCountBeforeCreate).toBe(favorite.length);
                  done();
                })
                .catch((err) => {
@@ -130,8 +122,8 @@ describe("routes : favorites", () => {
 
 describe("signed in user favoriting a post", () => {
 
-     beforeEach((done) => {  // before each suite in this context
-       request.get({         // mock authentication
+     beforeEach((done) => {
+       request.get({
          url: "http://localhost:3000/auth/fake",
          form: {
            role: "member",     // mock authenticate as member user
@@ -164,7 +156,7 @@ describe("signed in user favoriting a post", () => {
                  postId: this.post.id
                }
              })
-             .then((favorite) => {               // confirm that a favorite was created
+             .then((favorite) => {
                expect(favorite).not.toBeNull();
                expect(favorite.userId).toBe(this.user.id);
                expect(favorite.postId).toBe(this.post.id);
@@ -177,43 +169,6 @@ describe("signed in user favoriting a post", () => {
            });
        });
      });
-
-
-
-
-/*
-     describe("POST /topics/:topicId/posts/:postId/favorites/:id/destroy", () => {
-
-       it("should destroy a favorite", (done) => {
-         const options = {
-           url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`,
-           form: {
-             postId: this.post.id,
-             userId: this.user.id
-           }
-         };
-
-         let favCountBeforeDelete;
-
-         request.post(options, (err, res, body) => {
-           this.post.getFavorites()
-           .then((favorites) => {
-             const favorite = favorites[0];
-             favCountBeforeDelete = favorites.length;
-
-             request.post(`${base}${this.topic.id}/posts/${this.post.id}/favorites/${favorite.id}/destroy`,
-               (err, res, body) => {
-                 this.post.getFavorites()
-                 .then((favorites) => {
-                   expect(favorites.length).toBe(favCountBeforeDelete - 1);
-                   done();
-                 });
-               });
-           });
-         });
-       });
-     });
-*/
 
 
   });

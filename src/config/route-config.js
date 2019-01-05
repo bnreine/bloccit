@@ -13,10 +13,10 @@ module.exports = {
     }
     app.use(staticRoutes);
     app.use(topicRoutes);
-     app.use(postRoutes);
-     app.use(userRoutes);
-     app.use(commentRoutes);
-     app.use(voteRoutes);
-     app.use(favoriteRoutes);
+    app.use(postRoutes);
+    app.use(userRoutes);
+    app.use(commentRoutes);
+    app.use(voteRoutes);
+    app.use(favoriteRoutes);
   }
 }

@@ -4,8 +4,6 @@ const Post = require("../../src/db/models").Post;
 const User = require("../../src/db/models").User;
 
 describe("Post", () => {
-
-
   beforeEach((done) => {
     this.topic;
     this.post;
@@ -18,7 +16,7 @@ describe("Post", () => {
         password: "Trekkie4lyfe"
       })
       .then((user) => {
-        this.user = user; //store the user
+        this.user = user;
 
         Topic.create({
           title: "Expeditions to Alpha Centauri",
@@ -35,8 +33,8 @@ describe("Post", () => {
           }
         })
         .then((topic) => {
-          this.topic = topic; //store the topic
-          this.post = topic.posts[0]; //store the post
+          this.topic = topic;
+          this.post = topic.posts[0];
           done();
         })
       })
@@ -54,7 +52,6 @@ describe("Post", () => {
           userId: this.user.id
         })
         .then((post) => {
-          //console.log(post)
           expect(post.title).toBe("Pros of Cryosleep during the long journey");
           expect(post.body).toBe("1. Not having to answer the 'are we there yet?' question.");
           expect(post.topicId).toBe(this.topic.id);
@@ -75,20 +72,13 @@ describe("Post", () => {
           title: "Pros of Cryosleep during the long journey"
         })
         .then((post) => {
-
-         // the code in this block will not be evaluated since the validation error
-         // will skip it. Instead, we'll catch the error in the catch block below
-         // and set the expectations there
-
           done();
-
         })
         .catch((err) => {
 
           expect(err.message).toContain("Post.body cannot be null");
           expect(err.message).toContain("Post.topicId cannot be null");
           done();
-
         })
       });
 
@@ -103,19 +93,14 @@ describe("Post", () => {
 
   it("should associate a topic and a post together", (done) => {
 
-// #1
     Topic.create({
       title: "Challenges of interstellar travel",
       description: "1. The Wi-Fi is terrible"
     })
     .then((newTopic) => {
-
-// #2
       expect(this.post.topicId).toBe(this.topic.id);
-// #3
       this.post.setTopic(newTopic)
       .then((post) => {
-// #4
         expect(post.topicId).toBe(newTopic.id);
         done();
 
@@ -172,9 +157,7 @@ describe("#setUser()", () => {
 });
 
 describe("#getUser()", () => {
-
   it("should return the associated topic", (done) => {
-
     this.post.getUser()
     .then((associatedUser) => {
       expect(associatedUser.email).toBe("starman@tesla.com");
